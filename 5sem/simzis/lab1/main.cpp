@@ -6,7 +6,7 @@
 std::string getRandomStr(int range){
     std::string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     std::string result = "";
-    for (int i = 0; i < range, i++){
+    for (int i = 0; i < range; i++){
         int index = rand() % alphabet.length();
         result += alphabet[index];
     }

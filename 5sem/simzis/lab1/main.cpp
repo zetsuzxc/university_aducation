@@ -1,4 +1,3 @@
-// 2) Латиница строчные и прописные.
 #include <iostream>
 #include <string>
 #include <map>

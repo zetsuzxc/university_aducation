@@ -1,6 +1,17 @@
 #include <iostream>
 #include <string>
 #include <cctype>
+#include <cstdlib>
+#include <ctime>
+
+std::string generateKey(int length) {
+    std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    std::string key = "";
+    for (int i = 0; i < length; i++) {
+        key += alphabet[rand() % alphabet.size()];
+    }
+    return key;
+}
 
 std::string vigenereEncrypt(const std::string& text, const std::string& key) {
     std::string result;
@@ -51,51 +62,30 @@ std::string vigenereDecrypt(const std::string& text, const std::string& key) {
 }
 
 int main() {
-    std::string text, key;
+    srand(static_cast<unsigned int>(time(0)));
 
+    std::string text;
     std::cout << "Enter text: ";
     std::getline(std::cin, text);
 
-    std::cout << "Enter key: ";
-    std::getline(std::cin, key);
+    int keyLength;
+    std::cout << "Enter key length (recommended 16+): ";
+    std::cin >> keyLength;
+
+    if (keyLength < 1) {
+        std::cout << "Key length must be at least 1.\n";
+        return 1;
+    }
+
+    std::string key = generateKey(keyLength);
+    std::cout << "Generated key: " << key << "\n";
 
     std::string encrypted = vigenereEncrypt(text, key);
+    std::string decrypted = vigenereDecrypt(encrypted, key);
+
     std::cout << "\nOriginal:  " << text << "\n";
     std::cout << "Encrypted: " << encrypted << "\n";
-
-    // --- Атака полным перебором ---
-    std::cout << "\n--- Brute force (key length 3) ---\n";
-
-    long long attempts = 0;
-    std::string foundKey = "";
-    bool found = false;
-
-    for (char c1 = 'a'; c1 <= 'z' && !found; ++c1) {
-        for (char c2 = 'a'; c2 <= 'z' && !found; ++c2) {
-            for (char c3 = 'a'; c3 <= 'z' && !found; ++c3) {
-                std::string tryKey;
-                tryKey += c1;
-                tryKey += c2;
-                tryKey += c3;
-
-                attempts++;
-
-                std::string decrypted = vigenereDecrypt(encrypted, tryKey);
-                if (decrypted == text) {
-                    foundKey = tryKey;
-                    found = true;
-                }
-            }
-        }
-    }
-
-    if (found) {
-        std::cout << "Key found: " << foundKey << "\n";
-        std::cout << "Attempts:  " << attempts << "\n";
-        std::cout << "Decrypted: " << vigenereDecrypt(encrypted, foundKey) << "\n";
-    } else {
-        std::cout << "Key not found (tried " << attempts << " variants)\n";
-    }
+    std::cout << "Decrypted: " << decrypted << "\n";
 
     return 0;
 }

@@ -1,5 +1,9 @@
+// 2) Латиница строчные и прописные.
 #include<iostream>
 
 int main() {
-    std::cout << "helloworld" << std::endl;
+    int string_range = 0;
+    std::cout << "Input ur string range." << std::endl;
+    std::cin >> string_range;
+    std::cout << "Your string range - " << string_range << std::endl;
 }
